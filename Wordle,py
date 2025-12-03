@@ -1,0 +1,372 @@
+import tkinter as tk
+from tkinter import messagebox
+import random
+
+# List of words for the game
+words = [
+    "ABOUT", "ABOVE", "ABUSE", "ACTOR", "ACUTE", "ADMIT", "ADOPT", "ADULT",
+    "AFTER", "AGAIN", "AGENT", "AGREE", "AHEAD", "ALARM", "ALBUM", "ALERT",
+    "ALIEN", "ALIGN", "ALIKE", "ALIVE", "ALLOW", "ALONE", "ALONG", "ALTER",
+    "AMONG", "ANGER", "ANGLE", "ANGRY", "APART", "APPLE", "APPLY", "AREA",
+    "ARENA", "ARGUE", "ARISE", "ARRAY", "ASIDE", "ASSET", "AVOID", "AWAIT",
+    "AWAKE", "AWARD", "AWARE", "BADLY", "BAKER", "BASES", "BASIC", "BASIS",
+    "BEACH", "BEGAN", "BEGIN", "BEING", "BELOW", "BENCH", "BILLY", "BIRTH",
+    "BLACK", "BLAME", "BLANK", "BLAST", "BLIND", "BLOCK", "BLOOD", "BOARD",
+    "BOOST", "BOOTH", "BOUND", "BRAIN", "BRAND", "BREAD", "BREAK", "BREED",
+    "BRIEF", "BRING", "BROAD", "BROKE", "BROWN", "BUILD", "BUILT", "BUYER",
+    "CABLE", "CARRY", "CATCH", "CAUSE", "CHAIN", "CHAIR", "CHAOS", "CHART",
+    "CHASE", "CHEAP", "CHECK", "CHEST", "CHIEF", "CHILD", "CIVIL", "CLAIM",
+    "CLASS", "CLEAN", "CLEAR", "CLICK", "CLIMB", "CLOCK", "CLOSE", "COACH",
+    "COAST", "COULD", "COUNT", "COURT", "COVER", "CRAFT", "CRASH", "CRAZY",
+    "CREAM", "CRIME", "CROSS", "CROWD", "CROWN", "CRUDE", "CURVE", "CYCLE",
+    "DAILY", "DANCE", "DATED", "DEALT", "DEATH", "DEBUT", "DELAY", "DEPTH",
+    "DOING", "DOUBT", "DOZEN", "DRAFT", "DRAMA", "DRANK", "DREAM", "DRESS",
+    "DRILL", "DRINK", "DRIVE", "DROVE", "DYING", "EAGER", "EARLY", "EARTH",
+    "EIGHT", "ELITE", "EMPTY", "ENEMY", "ENJOY", "ENTER", "ENTRY", "EQUAL",
+    "ERROR", "EVENT", "EVERY", "EXACT", "EXIST", "EXTRA", "FAITH", "FALSE",
+    "FAULT", "FIBER", "FIELD", "FIFTH", "FIFTY", "FIGHT", "FINAL", "FIRST",
+    "FIXED", "FLASH", "FLEET", "FLOOR", "FLUID", "FOCUS", "FORCE", "FORTH",
+    "FORTY", "FORUM", "FOUND", "FRAME", "FRANK", "FRAUD", "FRESH", "FRONT",
+    "FRUIT", "FULLY", "FUNNY", "GIANT", "GIVEN", "GLASS", "GLOBE", "GOING",
+    "GRACE", "GRADE", "GRAND", "GRANT", "GRASS", "GRAVE", "GREAT", "GREEN",
+    "GROSS", "GROUP", "GROWN", "GUARD", "GUESS", "GUEST", "GUIDE", "HAPPY",
+    "HARRY", "HEART", "HEAVY", "HENCE", "HENRY", "HORSE", "HOTEL", "HOUSE",
+    "HUMAN", "IDEAL", "IMAGE", "INDEX", "INNER", "INPUT", "ISSUE", "JAPAN",
+    "JIMMY", "JOINT", "JONES", "JUDGE", "KNOWN", "LABEL", "LARGE", "LASER",
+    "LATER", "LAUGH", "LAYER", "LEARN", "LEASE", "LEAST", "LEAVE", "LEGAL",
+    "LEVEL", "LEWIS", "LIGHT", "LIMIT", "LINKS", "LIVES", "LOCAL", "LOOSE",
+    "LOWER", "LUCKY", "LUNCH", "LYING", "MAGIC", "MAJOR", "MAKER", "MARCH",
+    "MARIA", "MATCH", "MAYBE", "MAYOR", "MEANT", "MEDIA", "METAL", "MIGHT",
+    "MINOR", "MINUS", "MIXED", "MODEL", "MONEY", "MONTH", "MORAL", "MOTOR",
+    "MOUNT", "MOUSE", "MOUTH", "MOVED", "MOVIE", "MUSIC", "NEEDS", "NEVER",
+    "NEWLY", "NIGHT", "NOISE", "NORTH", "NOTED", "NOVEL", "NURSE", "OCCUR",
+    "OCEAN", "OFFER", "OFTEN", "ORDER", "OTHER", "OUGHT", "PAINT", "PANEL",
+    "PAPER", "PARTY", "PEACE", "PETER", "PHASE", "PHONE", "PHOTO", "PIECE",
+    "PILOT", "PITCH", "PLACE", "PLAIN", "PLANE", "PLANT", "PLATE", "POINT",
+    "POUND", "POWER", "PRESS", "PRICE", "PRIDE", "PRIME", "PRINT", "PRIOR",
+    "PRIZE", "PROOF", "PROUD", "PROVE", "QUEEN", "QUICK", "QUIET", "QUITE",
+    "RADIO", "RAISE", "RANGE", "RAPID", "RATIO", "REACH", "REACT", "READY",
+    "REALM", "REAR", "REASON", "RECALL", "RECENT", "RECORD", "REDUCE", "REFER",
+    "RELAX", "REMIT", "RENEW", "REPAIR", "REPLY", "REPORT", "RESET", "RESIN",
+    "RICE", "RICH", "RIDER", "RIDGE", "RIGHT", "RIGID", "RING", "RISE",
+    "RISK", "RIVER", "ROAD", "ROCK", "ROLE", "ROLL", "ROOF", "ROOM",
+    "ROOT", "ROPE", "ROSE", "ROUND", "ROUTE", "ROYAL", "RUBBER", "RURAL",
+    "RUSH", "SADLY", "SAFE", "SAID", "SAIL", "SALE", "SALT", "SAME",
+    "SAND", "SAVE", "SAY", "SCALE", "SCENE", "SCHOOL", "SCORE", "SCREEN",
+    "SEA", "SEAT", "SECOND", "SECRET", "SECTION", "SEE", "SEED", "SEEK",
+    "SEEM", "SEEN", "SELF", "SELL", "SEND", "SENSE", "SENT", "SERVE",
+    "SET", "SEVEN", "SHADE", "SHAKE", "SHALL", "SHAPE", "SHARE", "SHARP",
+    "SHE", "SHED", "SHEEP", "SHEET", "SHELF", "SHELL", "SHIFT", "SHINE",
+    "SHIP", "SHIRT", "SHOE", "SHOOT", "SHOP", "SHORT", "SHOT", "SHOULD",
+    "SHOW", "SHUT", "SICK", "SIDE", "SIGHT", "SIGN", "SILENT", "SILLY",
+    "SILVER", "SIMILAR", "SIMPLE", "SINCE", "SING", "SIR", "SISTER", "SIT",
+    "SITE", "SIZE", "SKILL", "SKIN", "SKY", "SLAVE", "SLEEP", "SLIDE",
+    "SLIGHT", "SLIP", "SLOW", "SMALL", "SMART", "SMELL", "SMILE", "SMOKE",
+    "SMOOTH", "SNAKE", "SNOW", "SOAP", "SOCIAL", "SOCK", "SOFT", "SOIL",
+    "SOLAR", "SOLDIER", "SOLID", "SOLUTION", "SOLVE", "SOME", "SON", "SONG",
+    "SOON", "SORRY", "SORT", "SOUL", "SOUND", "SOUP", "SOURCE", "SOUTH",
+    "SPACE", "SPEAK", "SPECIAL", "SPEED", "SPELL", "SPEND", "SPENT", "SPIRIT",
+    "SPLIT", "SPOKE", "SPORT", "SPOT", "SPREAD", "SPRING", "SQUARE", "STAGE",
+    "STAIR", "STAND", "STAR", "START", "STATE", "STATION", "STAY", "STEADY",
+    "STEAM", "STEEL", "STEP", "STICK", "STIFF", "STILL", "STOCK", "STONE",
+    "STOOD", "STOP", "STORE", "STORM", "STORY", "STRAIGHT", "STRANGE", "STREET",
+    "STRETCH", "STRIKE", "STRING", "STRIP", "STRONG", "STRUCTURE", "STUDENT", "STUDY",
+    "STUFF", "STYLE", "SUBJECT", "SUCCESS", "SUCH", "SUDDEN", "SUGAR", "SUITABLE",
+    "SUM", "SUMMER", "SUN", "SUPPLY", "SUPPORT", "SURE", "SURFACE", "SURPRISE",
+    "SWEET", "SWIM", "SYSTEM", "TABLE", "TAIL", "TAKE", "TALK", "TALL",
+    "TAPE", "TASK", "TASTE", "TAX", "TEA", "TEACH", "TEAM", "TEAR",
+    "TECHNIQUE", "TELEPHONE", "TELEVISION", "TELL", "TEMPERATURE", "TEN", "TEND", "TENT",
+    "TERM", "TERRIBLE", "TEST", "THAN", "THANK", "THAT", "THE", "THEATER",
+    "THEIR", "THEM", "THEN", "THEORY", "THERE", "THESE", "THEY", "THICK",
+    "THIN", "THING", "THINK", "THIRD", "THIS", "THOSE", "THOUGH", "THOUGHT",
+    "THOUSAND", "THREAD", "THREAT", "THREE", "THREW", "THROAT", "THROUGH", "THROW",
+    "THUMB", "THUS", "TICKET", "TIE", "TIGHT", "TILL", "TIME", "TINY",
+    "TIP", "TIRED", "TITLE", "TO", "TODAY", "TOE", "TOGETHER", "TOLD",
+    "TOMORROW", "TONE", "TONIGHT", "TOO", "TOOK", "TOOL", "TOOTH", "TOP",
+    "TOTAL", "TOUCH", "TOWARD", "TOWN", "TRACK", "TRADE", "TRAFFIC", "TRAIN",
+    "TRANSPORT", "TRAVEL", "TREAT", "TREE", "TRIANGLE", "TRIP", "TROUBLE", "TRUCK",
+    "TRUE", "TRUST", "TRUTH", "TRY", "TUBE", "TURN", "TWELVE", "TWENTY",
+    "TWICE", "TWO", "TYPE", "TYRE", "UGLY", "UNION", "UNIT", "UNITY",
+    "UNIVERSITY", "UNLESS", "UNTIL", "UP", "UPON", "UPPER", "URBAN", "URGE",
+    "US", "USE", "USED", "USEFUL", "USUAL", "VALUE", "VARIETY", "VARIOUS",
+    "VERY", "VICTORY", "VIEW", "VILLAGE", "VIOLENCE", "VISIT", "VOICE", "VOLUME",
+    "WAIT", "WALK", "WALL", "WANT", "WAR", "WARM", "WASH", "WASTE",
+    "WATCH", "WATER", "WAVE", "WAY", "WE", "WEAK", "WEALTH", "WEAR",
+    "WEATHER", "WEEK", "WEIGHT", "WELCOME", "WELL", "WENT", "WERE", "WEST",
+    "WET", "WHAT", "WHEEL", "WHEN", "WHERE", "WHETHER", "WHICH", "WHILE",
+    "WHITE", "WHO", "WHOLE", "WHOM", "WHOSE", "WHY", "WIDE", "WIFE",
+    "WILD", "WILL", "WIN", "WIND", "WINDOW", "WINE", "WING", "WINTER",
+    "WIRE", "WISE", "WISH", "WITH", "WITHIN", "WITHOUT", "WOMAN", "WONDER",
+    "WOOD", "WOOL", "WORD", "WORK", "WORLD", "WORRY", "WORSE", "WORTH",
+    "WOULD", "WRITE", "WRONG", "YARD", "YEAH", "YEAR", "YELLOW", "YES",
+    "YESTERDAY", "YET", "YOU", "YOUNG", "YOUR", "ZERO"
+]
+
+# Game variables
+target_word = ""
+current_guess = ""
+guesses = []
+current_row = 0
+max_attempts = 6
+word_length = 5
+
+# Colors for the game
+green_color = "#6aaa64"
+yellow_color = "#c9b458"
+gray_color = "#787c7e"
+default_color = "#d3d6da"
+
+# These will store our GUI elements
+cells = []
+key_buttons = {}
+
+def start_new_game():
+    global target_word, current_guess, guesses, current_row
+    
+    # Pick a random word
+    target_word = random.choice(words)
+    current_guess = ""
+    guesses = []
+    current_row = 0
+    
+    # Reset all cells on the board
+    for row in range(max_attempts):
+        for col in range(word_length):
+            cells[row][col].config(text="", bg=default_color)
+    
+    # Reset keyboard colors
+    for button in key_buttons.values():
+        button.config(bg="SystemButtonFace")
+    
+    
+
+def create_game_board(window):
+    global cells
+    
+    # Make a frame for the game board
+    board_frame = tk.Frame(window)
+    board_frame.pack(pady=20)
+    
+    # Create all the cells for guesses
+    for row in range(max_attempts):
+        row_cells = []
+        for col in range(word_length):
+            # Make a label for each letter
+            cell = tk.Label(
+                board_frame,
+                text="",
+                width=4,
+                height=2,
+                font=("Arial", 18, "bold"),
+                relief="solid",
+                borderwidth=2,
+                bg=default_color
+            )
+            cell.grid(row=row, column=col, padx=5, pady=5)
+            row_cells.append(cell)
+        cells.append(row_cells)
+
+def create_keyboard(window):
+    global key_buttons
+    
+    # Make a frame for keyboard
+    keyboard_frame = tk.Frame(window)
+    keyboard_frame.pack(pady=10)
+    
+    # First row of keyboard
+    row1 = "QWERTYUIOP"
+    row1_frame = tk.Frame(keyboard_frame)
+    row1_frame.pack()
+    
+    for letter in row1:
+        button = tk.Button(
+            row1_frame,
+            text=letter,
+            width=4,
+            height=2,
+            font=("Arial", 10),
+            command=lambda l=letter: add_letter(l)
+        )
+        button.pack(side=tk.LEFT, padx=2, pady=2)
+        key_buttons[letter] = button
+    
+    # Second row of keyboard
+    row2 = "ASDFGHJKL"
+    row2_frame = tk.Frame(keyboard_frame)
+    row2_frame.pack()
+    
+    for letter in row2:
+        button = tk.Button(
+            row2_frame,
+            text=letter,
+            width=4,
+            height=2,
+            font=("Arial", 10),
+            command=lambda l=letter: add_letter(l)
+        )
+        button.pack(side=tk.LEFT, padx=2, pady=2)
+        key_buttons[letter] = button
+    
+    # Third row of keyboard
+    row3 = "ZXCVBNM"
+    row3_frame = tk.Frame(keyboard_frame)
+    row3_frame.pack()
+    
+    for letter in row3:
+        button = tk.Button(
+            row3_frame,
+            text=letter,
+            width=4,
+            height=2,
+            font=("Arial", 10),
+            command=lambda l=letter: add_letter(l)
+        )
+        button.pack(side=tk.LEFT, padx=2, pady=2)
+        key_buttons[letter] = button
+    
+    # Make Enter and Backspace buttons
+    controls_frame = tk.Frame(keyboard_frame)
+    controls_frame.pack(pady=5)
+    
+    enter_button = tk.Button(
+        controls_frame,
+        text="ENTER",
+        width=8,
+        height=2,
+        font=("Arial", 10),
+        command=submit_guess
+    )
+    enter_button.pack(side=tk.LEFT, padx=2)
+    
+    backspace_button = tk.Button(
+        controls_frame,
+        text="⌫",
+        width=8,
+        height=2,
+        font=("Arial", 10),
+        command=remove_letter
+    )
+    backspace_button.pack(side=tk.LEFT, padx=2)
+
+def add_letter(letter):
+    global current_guess
+    
+    if len(current_guess) < word_length:
+        current_guess += letter
+        update_display()
+
+def remove_letter():
+    global current_guess
+    
+    if len(current_guess) > 0:
+        current_guess = current_guess[:-1]  # Remove last letter
+        update_display()
+
+def update_display():
+    # Show current guess on the board
+    for col in range(word_length):
+        if col < len(current_guess):
+            cells[current_row][col].config(text=current_guess[col])
+        else:
+            cells[current_row][col].config(text="")
+
+def submit_guess():
+    global current_guess, current_row, guesses
+    
+    # Check if word is complete
+    if len(current_guess) != word_length:
+        messagebox.showwarning("Oops!", f"Need {word_length} letters!")
+        return
+    
+    # Check if word is in our list
+    if current_guess not in words:
+        messagebox.showwarning("Oops!", "That's not a valid word!")
+        return
+    
+    # Add to guesses
+    guesses.append(current_guess)
+    
+    # Check the guess
+    check_guess()
+    
+    # Check if player won
+    if current_guess == target_word:
+        messagebox.showinfo("You Win!", f"Awesome! The word was {target_word}")
+        start_new_game()
+        return
+    
+    # Check if game over
+    current_row += 1
+    if current_row >= max_attempts:
+        messagebox.showinfo("Game Over", f"Sorry! The word was {target_word}")
+        start_new_game()
+        return
+    
+    # Reset for next guess
+    current_guess = ""
+
+def check_guess():
+    # Make a list to track which letters we've checked
+    target_letters = list(target_word)
+    
+    # First check for correct letters in correct spots (green)
+    for i in range(word_length):
+        if current_guess[i] == target_word[i]:
+            cells[current_row][i].config(bg=green_color)
+            target_letters[i] = None  # Mark this letter as used
+            key_buttons[current_guess[i]].config(bg=green_color)
+    
+    # Then check for correct letters in wrong spots (yellow)
+    for i in range(word_length):
+        # Only check if not already green
+        if cells[current_row][i].cget("bg") != green_color:
+            if current_guess[i] in target_letters:
+                cells[current_row][i].config(bg=yellow_color)
+                # Find and mark this letter as used
+                for j in range(len(target_letters)):
+                    if target_letters[j] == current_guess[i]:
+                        target_letters[j] = None
+                        break
+                # Update keyboard if not already green
+                if key_buttons[current_guess[i]].cget("bg") != green_color:
+                    key_buttons[current_guess[i]].config(bg=yellow_color)
+            else:
+                cells[current_row][i].config(bg=gray_color)
+                # Update keyboard if not already green or yellow
+                btn_color = key_buttons[current_guess[i]].cget("bg")
+                if btn_color != green_color and btn_color != yellow_color:
+                    key_buttons[current_guess[i]].config(bg=gray_color)
+
+def handle_keypress(event):
+    key = event.char.upper()
+    
+    if key.isalpha() and len(key) == 1:
+        add_letter(key)
+    elif event.keysym == "BackSpace":
+        remove_letter()
+    elif event.keysym == "Return":
+        submit_guess()
+
+def main():
+    # Create the main window
+    window = tk.Tk()
+    window.title("Wordle Game")
+    window.geometry("500x600")
+    
+    # Create game elements
+    create_game_board(window)
+    create_keyboard(window)
+    
+    # Start first game
+    start_new_game()
+    
+    # Set up keyboard controls
+    window.bind("<Key>", handle_keypress)
+    window.focus_set()
+    
+    # Start the game
+    window.mainloop()
+
+# Start the program
+if __name__ == "__main__":
+    main()
